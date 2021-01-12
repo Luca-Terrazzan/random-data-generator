@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A simple app to generate random data JSONs ",
   "scripts": {
-    "start": "node ./generateJson.js"
+    "start": "node ./generateCsv.js"
   },
   "author": "Luca Terrazzan <luca.terraz@gmail.com>",
   "license": "ISC",
