@@ -6,6 +6,7 @@ program.requiredOption('-a, --amount <number>', 'The amount of records to genera
 
 const likertData = [];
 const ticketsData = [];
+const callsData = [];
 
 const startDate = '01012020';
 
@@ -19,6 +20,11 @@ for (let i = 0; i < program.amount; i++) {
     date: generateDate(startDate, i),
     value: generateTicketsValue(i)
   });
+
+  callsData.push({
+    date: generateDate(startDate, i),
+    value: generateCallRequestsValue(i)
+  });
 }
 
 console.log(likertData.slice(0,10));
@@ -29,6 +35,8 @@ console.log(likertData.slice(0,10));
   await (new Csv(likertData)).toDisk('./likert-year.csv');
 
   await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
+
+  await (new Csv(callsData)).toDisk('./calls-year.csv')
 
   console.log('...done!');
 })();
@@ -57,6 +65,18 @@ function generateTicketsValue(daysPassed) {
     baseAverage
     + (maxAverage - baseAverage) * (daysPassed / program.amount)
     + (Math.random() * 8 - 4);
+
+  return Math.max(Math.round(currentAverage), 0);
+}
+
+function generateCallRequestsValue(daysPassed) {
+  const baseAverage = 30;
+  const maxAverage = 20;
+
+  const currentAverage =
+    baseAverage
+    + (maxAverage - baseAverage) * (daysPassed / program.amount)
+    + (Math.random() * 20 - 10);
 
   return Math.max(Math.round(currentAverage), 0);
 }
