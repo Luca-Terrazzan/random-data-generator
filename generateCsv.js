@@ -39,13 +39,13 @@ for (let i = 1; i < maxRenewalsDataPoints; i++) {
 (async () => {
   console.log('Writing CSV...');
 
-  // await (new Csv(likertData)).toDisk('./likert-year.csv');
+  await (new Csv(likertData)).toDisk('./likert-year.csv');
 
-  // await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
+  await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
 
-  // await (new Csv(callsData)).toDisk('./calls-year.csv')
+  await (new Csv(callsData)).toDisk('./calls-year.csv')
 
-  await (new Csv(renewalsData)).toDisk('./calls.csv')
+  await (new Csv(renewalsData)).toDisk('./renewals.csv')
 
   console.log('...done!');
 })();
