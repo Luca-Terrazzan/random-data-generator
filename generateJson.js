@@ -6,11 +6,12 @@ program.requiredOption('-f, --format <string>', 'The output format, can be JSON 
 program.requiredOption('-a, --amount <number>', 'The amount of records to generate', 380);
 
 const data = [];
+const startDate = '01012020';
 
 for (let i = 0; i < program.amount; i++) {
   data.push({
-    date: moment('01012020', 'DDMMYYYY').add(i, 'days').format('MM-DD-YYYY'),
-    value: 2
+    date: generateDate(startDate, i),
+    value: generateIncreasingLikertValue(i)
   });
 }
 
@@ -20,7 +21,23 @@ console.log(data.slice(0,10));
   console.log('Writing CSV...');
 
   const writer = new Csv(data);
-  await writer.toDisk('./test.csv')
+  await writer.toDisk('./likert-year.csv')
 
   console.log('...done!');
 })();
+
+function generateDate(startDate, daysPassed) {
+  return moment(startDate, 'DDMMYYYY').add(daysPassed, 'days').format('MM-DD-YYYY');
+}
+
+function generateIncreasingLikertValue(daysPassed) {
+  const baseAverage = 6;
+  const maxAverage = 9;
+
+  const currentAverage =
+    baseAverage
+    + (maxAverage - baseAverage) * (daysPassed / program.amount)
+    + Math.random();
+
+  return currentAverage;
+}
