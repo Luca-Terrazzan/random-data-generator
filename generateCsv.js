@@ -44,19 +44,19 @@ function generateIncreasingLikertValue(daysPassed) {
   const currentAverage =
     baseAverage
     + (maxAverage - baseAverage) * (daysPassed / program.amount)
-    + Math.random();
+    + (Math.random() - 0.5);
 
   return currentAverage;
 }
 
 function generateTicketsValue(daysPassed) {
-  const baseAverage = 50;
-  const maxAverage = 20;
+  const baseAverage = 15;
+  const maxAverage = 5;
 
   const currentAverage =
     baseAverage
     + (maxAverage - baseAverage) * (daysPassed / program.amount)
-    + Math.random() * 8;
+    + (Math.random() * 8 - 4);
 
-  return currentAverage;
+  return Math.max(Math.round(currentAverage), 0);
 }
