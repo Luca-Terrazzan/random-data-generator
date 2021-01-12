@@ -10,6 +10,7 @@ const callsData = [];
 const renewalsData = [];
 
 const startDate = '01012020';
+const maxRenewalsDataPoints = 15;
 
 for (let i = 0; i < program.amount; i++) {
   likertData.push({
@@ -28,7 +29,7 @@ for (let i = 0; i < program.amount; i++) {
   });
 }
 
-for (let i = 1; i < 15; i++) {
+for (let i = 1; i < maxRenewalsDataPoints; i++) {
   renewalsData.push({
     hours: i,
     renewalForecast: generateRenewalForecast(i)
@@ -54,7 +55,7 @@ function generateDate(startDate, daysPassed) {
 }
 
 function generateRenewalForecast(hours) {
-  return hours * 10;
+  return 15 + (Math.pow(2, hours) / Math.pow(2, maxRenewalsDataPoints) * 85);
 }
 
 function generateIncreasingLikertValue(daysPassed) {
