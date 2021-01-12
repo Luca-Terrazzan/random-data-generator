@@ -7,6 +7,7 @@ program.requiredOption('-a, --amount <number>', 'The amount of records to genera
 const likertData = [];
 const ticketsData = [];
 const callsData = [];
+const renewalsData = [];
 
 const startDate = '01012020';
 
@@ -27,22 +28,33 @@ for (let i = 0; i < program.amount; i++) {
   });
 }
 
-console.log(likertData.slice(0,10));
+for (let i = 1; i < 15; i++) {
+  renewalsData.push({
+    hours: i,
+    renewalForecast: generateRenewalForecast(i)
+  });
+}
 
 (async () => {
   console.log('Writing CSV...');
 
-  await (new Csv(likertData)).toDisk('./likert-year.csv');
+  // await (new Csv(likertData)).toDisk('./likert-year.csv');
 
-  await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
+  // await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
 
-  await (new Csv(callsData)).toDisk('./calls-year.csv')
+  // await (new Csv(callsData)).toDisk('./calls-year.csv')
+
+  await (new Csv(renewalsData)).toDisk('./calls.csv')
 
   console.log('...done!');
 })();
 
 function generateDate(startDate, daysPassed) {
   return moment(startDate, 'DDMMYYYY').add(daysPassed, 'days').format('MM-DD-YYYY');
+}
+
+function generateRenewalForecast(hours) {
+  return hours * 10;
 }
 
 function generateIncreasingLikertValue(daysPassed) {
