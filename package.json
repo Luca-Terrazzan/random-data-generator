@@ -1,0 +1,15 @@
+{
+  "name": "random-data-maker",
+  "version": "1.0.0",
+  "description": "A simple app to generate random data JSONs ",
+  "scripts": {
+    "start": "node ./generateJson.js"
+  },
+  "author": "Luca Terrazzan <luca.terraz@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^6.2.1",
+    "moment": "^2.29.1",
+    "objects-to-csv": "^1.3.6"
+  }
+}
