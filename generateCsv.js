@@ -31,7 +31,8 @@ for (let i = 0; i < program.amount; i++) {
 
   sessionsData.push({
     date: generateDate(startDate, i),
-    value: generateSessionsData(i)
+    sessions: generateSessionsData(i),
+    significativesessions: generateSignificativeSessionsData(i)
   });
 }
 
@@ -45,13 +46,15 @@ for (let i = 1; i < maxRenewalsDataPoints; i++) {
 (async () => {
   console.log('Writing CSV...');
 
-  await (new Csv(likertData)).toDisk('./likert-year.csv');
+  // await (new Csv(likertData)).toDisk('./likert-year.csv');
 
   // await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
 
   // await (new Csv(callsData)).toDisk('./calls-year.csv')
 
   // await (new Csv(renewalsData)).toDisk('./renewals.csv')
+
+  await (new Csv(sessionsData)).toDisk('./sessions.csv')
 
   console.log('...done!');
 })();
@@ -61,7 +64,31 @@ function generateDate(startDate, daysPassed) {
 }
 
 function generateSessionsData(daysPassed) {
-  return 10;
+  const baseAverage = 1200;
+  const maxAverage = 3000;
+
+  console.log('log', Math.log((maxAverage - baseAverage) * (daysPassed / program.amount))); // Add a linear trend that lowers
+  const currentAverage =
+    baseAverage
+    + 100 * Math.log((maxAverage - baseAverage) * (daysPassed / program.amount)) // Add a log trend
+    * (daysPassed > 70) // Only start showing a trend after 60 days
+    + (Math.random() - 0.5) * 200;
+
+  return currentAverage;
+}
+
+function generateSignificativeSessionsData(daysPassed) {
+  const baseAverage = 1100;
+  const maxAverage = 2700;
+
+  const currentAverage =
+    baseAverage
+    + (maxAverage - baseAverage) * (daysPassed / program.amount) // Add a linear trend that lowers
+                                                                 // tickets down to a minimum average
+    * (daysPassed > 70) // Only start showing a trend after 60 days
+    + (Math.random() - 0.5) * 200;
+
+  return currentAverage;
 }
 
 function generateRenewalForecast(hours) {
