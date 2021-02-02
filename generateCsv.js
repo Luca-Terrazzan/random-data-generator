@@ -45,9 +45,9 @@ for (let i = 1; i < maxRenewalsDataPoints; i++) {
 (async () => {
   console.log('Writing CSV...');
 
-  // await (new Csv(likertData)).toDisk('./likert-year.csv');
+  await (new Csv(likertData)).toDisk('./likert-year.csv');
 
-  await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
+  // await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
 
   // await (new Csv(callsData)).toDisk('./calls-year.csv')
 
@@ -70,12 +70,14 @@ function generateRenewalForecast(hours) {
 
 function generateIncreasingLikertValue(daysPassed) {
   const baseAverage = 6;
-  const maxAverage = 9;
+  const maxAverage = 8.5;
 
   const currentAverage =
     baseAverage
-    + (maxAverage - baseAverage) * (daysPassed / program.amount)
-    + (Math.random() - 0.5);
+    + (maxAverage - baseAverage) * (daysPassed / program.amount) // Add a linear trend that lowers
+                                                                 // tickets down to a minimum average
+    * (daysPassed > 250) // Only start showing a trend after 60 days
+    + (Math.random() - 0.5) * 2;
 
   return currentAverage;
 }
@@ -96,11 +98,13 @@ function generateTicketsValue(daysPassed) {
 
 function generateCallRequestsValue(daysPassed) {
   const baseAverage = 30;
-  const maxAverage = 20;
+  const maxAverage = 15;
 
   const currentAverage =
     baseAverage
-    + (maxAverage - baseAverage) * (daysPassed / program.amount)
+    + (maxAverage - baseAverage) * (daysPassed / program.amount) // Add a linear trend that lowers
+                                                                 // tickets down to a minimum average
+    * (daysPassed > 150) // Only start showing a trend after 60 days
     + (Math.random() * 20 - 10);
 
   return Math.max(Math.round(currentAverage), 0);
