@@ -8,6 +8,7 @@ const likertData = [];
 const ticketsData = [];
 const callsData = [];
 const renewalsData = [];
+const sessionsData = [];
 
 const startDate = '01012020';
 const maxRenewalsDataPoints = 15;
@@ -27,6 +28,11 @@ for (let i = 0; i < program.amount; i++) {
     date: generateDate(startDate, i),
     value: generateCallRequestsValue(i)
   });
+
+  sessionsData.push({
+    date: generateDate(startDate, i),
+    value: generateSessionsData(i)
+  });
 }
 
 for (let i = 1; i < maxRenewalsDataPoints; i++) {
@@ -39,19 +45,23 @@ for (let i = 1; i < maxRenewalsDataPoints; i++) {
 (async () => {
   console.log('Writing CSV...');
 
-  await (new Csv(likertData)).toDisk('./likert-year.csv');
+  // await (new Csv(likertData)).toDisk('./likert-year.csv');
 
   await (new Csv(ticketsData)).toDisk('./tickets-year.csv')
 
-  await (new Csv(callsData)).toDisk('./calls-year.csv')
+  // await (new Csv(callsData)).toDisk('./calls-year.csv')
 
-  await (new Csv(renewalsData)).toDisk('./renewals.csv')
+  // await (new Csv(renewalsData)).toDisk('./renewals.csv')
 
   console.log('...done!');
 })();
 
 function generateDate(startDate, daysPassed) {
   return moment(startDate, 'DDMMYYYY').add(daysPassed, 'days').format('MM-DD-YYYY');
+}
+
+function generateSessionsData(daysPassed) {
+  return 10;
 }
 
 function generateRenewalForecast(hours) {
@@ -72,11 +82,13 @@ function generateIncreasingLikertValue(daysPassed) {
 
 function generateTicketsValue(daysPassed) {
   const baseAverage = 15;
-  const maxAverage = 5;
+  const maxAverage = 2;
 
   const currentAverage =
     baseAverage
-    + (maxAverage - baseAverage) * (daysPassed / program.amount)
+    + (maxAverage - baseAverage) * (daysPassed / program.amount) // Add a linear trend that lowers
+                                                                 // tickets down to a minimum average
+    * (daysPassed > 150) // Only start showing a trend after 60 days
     + (Math.random() * 8 - 4);
 
   return Math.max(Math.round(currentAverage), 0);
